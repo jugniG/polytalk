@@ -202,6 +202,7 @@ export default function Translation() {
 						});
 						setLiveTranscript("");
 						setLiveTranslation("");
+						setStatus("idle");
 						return;
 					}
 
@@ -230,6 +231,7 @@ export default function Translation() {
 
 					setLiveTranscript("");
 					setLiveTranslation("");
+					setStatus("idle");
 					setActiveSide((current) => (current === "A" ? "B" : "A"));
 				},
 				(err) => {
