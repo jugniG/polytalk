@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import langs from "langs";
 import { ArrowLeft, ArrowLeftRight, Mic, MicVocal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDevices } from "@/hooks/use-devices";
+import { authClient } from "#/lib/auth-client";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslationStream } from "@/hooks/use-translation-stream";
 import { useVoiceDetection } from "@/hooks/use-voice-detection";
@@ -35,6 +36,26 @@ export const Route = createFileRoute("/translate/")({
 
 export default function Translation() {
 	const { toast } = useToast();
+	const navigate = useNavigate();
+	const { data: session, isPending: isAuthPending } = authClient.useSession();
+
+	useEffect(() => {
+		if (!isAuthPending && !session?.user) {
+			void navigate({ to: "/sign-in" });
+		}
+	}, [isAuthPending, session, navigate]);
+
+	if (isAuthPending) {
+		return (
+			<div className="h-[100dvh] w-full flex items-center justify-center bg-[#0c0c0e] text-white">
+				<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+			</div>
+		);
+	}
+
+	if (!session?.user) {
+		return null;
+	}
 	const { mics, speakers, hasPermission, requestPermission } = useDevices();
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [waveformData, setWaveformData] = useState<number[]>([]);
@@ -439,13 +460,22 @@ export default function Translation() {
 					</button>
 				</Link>
 
-				<Link
-					to="/mic-check"
-					className="flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
-				>
-					<MicVocal className="h-4 w-4" />
-					Mic Check
-				</Link>
+				<div className="flex items-center gap-2">
+					<Link
+						to="/mic-check"
+						className="flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
+					>
+						<MicVocal className="h-4 w-4" />
+						Mic Check
+					</Link>
+					<button
+						onClick={() => void authClient.signOut()}
+						className="rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
+						data-testid="button-signout"
+					>
+						Sign out
+					</button>
+				</div>
 
 				{/* {messages.length > 0 && (
 					<button

@@ -3,7 +3,6 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import speech from "@google-cloud/speech";
 import { createFileRoute } from "@tanstack/react-router";
-import { storage } from "#/db/storage";
 import { detectAudioFormat } from "#/lib/audio";
 import { env } from "#/lib/env";
 import {
@@ -214,6 +213,8 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 					];
 					console.log("[audio stream] request received", {
 						sizeKB: (audioBuffer.length / 1024).toFixed(1),
+						mimeType: audioMimeType || "unknown",
+						detectedFormat,
 						primaryLang,
 						secondaryLanguage,
 						languageCodes,
@@ -336,20 +337,6 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 										sourceLang,
 										targetLang,
 									});
-
-									void storage
-										.createTranslation({
-											sourceText: userTranscript,
-											translatedText,
-											primaryLang,
-											secondaryLang:secondaryLanguage
-										})
-										.catch((storageError) => {
-											console.error(
-												"[audio stream] failed to store translation",
-												storageError,
-											);
-										});
 
 									console.log("[audio stream] completed", {
 										userTranscriptLength: userTranscript.length,
