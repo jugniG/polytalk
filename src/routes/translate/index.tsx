@@ -144,10 +144,6 @@ export default function Translation() {
 		setTimeout(() => setSwapping(false), 400);
 		setLangA(langB);
 		setLangB(langA);
-		setMicA(micB);
-		setMicB(micA);
-		setSpeakerA(speakerB);
-		setSpeakerB(speakerA);
 	};
 
 	const processAudio = async (audioFile: File | Blob) => {
