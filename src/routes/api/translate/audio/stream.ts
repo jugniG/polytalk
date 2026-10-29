@@ -110,6 +110,14 @@ const sttClient = existsSync(serviceAccountPath)
 		})
 	: null;
 
+console.log("[stt] client init", {
+	endpoint: speechEndpoint,
+	region: env.GOOGLE_STT_REGION,
+	model: env.GOOGLE_STT_MODEL || "short",
+	serviceAccountFile: env.GOOGLE_SERVICE_ACCOUNT_FILE,
+	clientReady: !!sttClient,
+});
+
 async function transcribeWithGoogle(
 	audioBuffer: Buffer,
 	languageCodes: string[],
