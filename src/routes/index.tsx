@@ -5,13 +5,10 @@ import {
 	ArrowLeftRight,
 	ChevronRight,
 	Globe2,
-	Headphones,
 	Mic,
-	SmartphoneNfc,
 	Volume2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "wouter";
 import { getLangFlagUrl } from "./translate/-actions";
 
 /* ─────────────────────────────────────────────────── */
@@ -384,8 +381,6 @@ function AppPreviewDemo() {
 /*  Page                                               */
 /* ─────────────────────────────────────────────────── */
 export default function Landing() {
-	const [, setLocation] = useLocation();
-
 	return (
 		<div className="w-full min-h-[100dvh] bg-matte-dark text-white relative overflow-y-auto overflow-x-hidden grain">
 			{/* Ambient glow */}

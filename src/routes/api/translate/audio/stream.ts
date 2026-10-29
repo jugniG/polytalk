@@ -3,12 +3,10 @@ import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import speech from "@google-cloud/speech";
 import { createFileRoute } from "@tanstack/react-router";
-import LanguageDetect from "languagedetect";
 import { storage } from "#/db/storage";
 import { detectAudioFormat } from "#/lib/audio";
 import { env } from "#/lib/env";
 import {
-	codeToName,
 	detectLanguageFromTranscript,
 	translateText,
 } from "#/lib/translation/client";

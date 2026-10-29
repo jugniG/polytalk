@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Clock, MessageSquareQuote } from "lucide-react";
+import { type Translation } from "@/db/schema";
 import { useTranslations } from "@/hooks/use-translations";
 
 interface HistoryModalProps {
@@ -55,7 +56,7 @@ export function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                   <p className="text-sm">Your recorded conversations will appear here.</p>
                 </div>
               ) : (
-                translations.map(t => (
+                translations.map((t: Translation) => (
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -64,9 +65,9 @@ export function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
-                        <span className="bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded-md">{t.sourceLanguage}</span>
+                        <span className="bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded-md">{t.primaryLang}</span>
                         <span>→</span>
-                        <span className="bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded-md">{t.targetLanguage}</span>
+                        <span className="bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded-md">{t.secondaryLang}</span>
                       </div>
                       <span className="text-xs text-zinc-400 font-medium">
                         {t.createdAt ? formatDistanceToNow(new Date(t.createdAt), { addSuffix: true }) : ''}

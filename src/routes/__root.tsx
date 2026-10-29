@@ -5,7 +5,6 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 
-import ThemeToggle from "../components/ThemeToggle";
 import TanStackQueryProvider from "../integrations/tanstack-query/root-provider";
 import appCss from "../styles.css?url";
 

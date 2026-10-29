@@ -14,3 +14,4 @@ todos.json
 .vercel
 gcp-service-account.json
 public/failed-audios/
+*.tsbuildinfo

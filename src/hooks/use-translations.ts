@@ -1,5 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { insertTranslationSchema } from "#/db/schema";
+import { useQuery } from "@tanstack/react-query";
 
 export function useTranslations() {
   return useQuery({

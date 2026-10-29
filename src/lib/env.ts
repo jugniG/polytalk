@@ -18,4 +18,7 @@ if (!_env.success) {
 	// throw new Error("Invalid environment variables");
 }
 
-export const env = _env.data;
+export const env = _env.success
+	? _env.data
+	: (console.error("❌ Invalid environment variables:", _env.error.issues),
+		{} as z.infer<typeof envSchema>);

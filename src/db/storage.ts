@@ -1,6 +1,6 @@
 import { db } from "./index";
 import { translations, type InsertTranslation, type Translation } from "./schema";
-import { eq, desc } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 
 export interface IStorage {
   getTranslations(): Promise<Translation[]>;

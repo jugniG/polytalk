@@ -15,7 +15,7 @@ const getTodos = createServerFn({
 const createTodo = createServerFn({
   method: 'POST',
 })
-  .inputValidator((data: { title: string }) => data)
+  .validator((data: { title: string }) => data)
   .handler(async ({ data }) => {
     await db.insert(todos).values({ title: data.title })
     return { success: true }
@@ -122,7 +122,6 @@ function DemoDrizzle() {
             style={{
               background: 'rgba(93, 103, 227, 0.1)',
               borderColor: 'rgba(93, 103, 227, 0.3)',
-              focusRing: 'rgba(93, 103, 227, 0.5)',
             }}
           />
           <button

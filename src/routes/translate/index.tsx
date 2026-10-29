@@ -29,23 +29,6 @@ function langToLocale(lang: string) {
 		: maximized.language;
 }
 
-function voiceMatchesLanguage(
-	voice: SpeechSynthesisVoice | null | undefined,
-	languageCode: string,
-): boolean {
-	if (!voice) {
-		return false;
-	}
-
-	const normalizedTarget = languageCode.toLowerCase();
-	const normalizedVoiceLang = voice.lang.toLowerCase();
-
-	return (
-		normalizedVoiceLang === normalizedTarget ||
-		normalizedVoiceLang.startsWith(`${normalizedTarget}-`)
-	);
-}
-
 export const Route = createFileRoute("/translate/")({
 	component: Translation,
 });
@@ -76,7 +59,7 @@ export default function Translation() {
 		const savedLangB = window.localStorage.getItem("parley:langB");
 
 		// ignore languages saved before the Indian-languages-only catalog
-		const isKnown = (name: string | null) =>
+		const isKnown = (name: string | null): name is string =>
 			!!name && LANGUAGES.some((l) => l.name === name);
 		if (isKnown(savedLangA)) setLangA(savedLangA);
 		if (isKnown(savedLangB)) setLangB(savedLangB);

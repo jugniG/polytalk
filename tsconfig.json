@@ -1,10 +1,10 @@
 {
   "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["staging", "node_modules", ".output", ".nitro", ".vercel", ".data", "src/components/ui"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
-    "baseUrl": ".",
     "paths": {
       "#/*": ["./src/*"],
       "@/*": ["./src/*"]
@@ -17,6 +17,7 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
+    "incremental": true,
 
     /* Linting */
     "skipLibCheck": true,

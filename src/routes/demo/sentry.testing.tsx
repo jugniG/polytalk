@@ -25,7 +25,7 @@ export const Route = createFileRoute('/demo/sentry/testing')({
           <h1 className="text-2xl font-bold text-white mt-4 mb-2">
             Something went wrong
           </h1>
-          <p className="text-[#A49FB5]">{error.message}</p>
+          <p className="text-[#A49FB5]">{error instanceof Error ? error.message : String(error)}</p>
         </div>
       </div>
     )
