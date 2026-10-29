@@ -40,8 +40,7 @@ export default function Translation() {
 	const [waveformData, setWaveformData] = useState<number[]>([]);
 
 	const [langA, setLangA] = useState("Hindi");
-	const [langB, setLangB] = useState("English");
-	const [micA, setMicA] = useState("default");
+	const [langB, setLangB] = useState("English");	const [micA, setMicA] = useState("default");
 	const [speakerA, setSpeakerA] = useState("default");
 	const [micB, setMicB] = useState("default");
 	const [speakerB, setSpeakerB] = useState("default");
@@ -49,6 +48,7 @@ export default function Translation() {
 	const [liveTranscript, setLiveTranscript] = useState("");
 	const [liveTranslation, setLiveTranslation] = useState("");
 	const [swapping, setSwapping] = useState(false);
+	const [showTranslated, setShowTranslated] = useState(true);
 
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const micLevelRef = useRef(0);
@@ -210,8 +210,10 @@ export default function Translation() {
 						{
 							id: crypto.randomUUID(),
 							translatedText: result.translatedText,
+							sourceText: result.userTranscript,
 							timestamp: new Date(),
 							lang: result.sourceLang,
+							targetLang: result.targetLang,
 						},
 					]);
 					window.setTimeout(() => {
@@ -541,8 +543,43 @@ export default function Translation() {
 					</div>
 				) : (
 					<div className="py-2">
+						{/* Raw ⇄ Translated switch */}
+						<div className="flex justify-end mb-2">
+							<button
+								role="switch"
+								aria-checked={showTranslated}
+								onClick={() => setShowTranslated((v) => !v)}
+								className="group flex items-center gap-2 cursor-pointer"
+								data-testid="switch-translated"
+							>
+								<span
+									className={`text-[10px] uppercase tracking-widest transition-colors ${
+										showTranslated
+											? "text-white/40 group-hover:text-white/60"
+											: "text-white/70 group-hover:text-white"
+									}`}
+								>
+									Translated
+								</span>
+								<span
+									className={`relative h-4 w-7 rounded-full transition-colors duration-200 ${
+										showTranslated ? "bg-emerald-500/80" : "bg-white/15"
+									}`}
+								>
+									<span
+										className={`absolute top-0.5 h-3 w-3 rounded-full bg-white transition-all duration-200 ${
+											showTranslated ? "left-3.5" : "left-0.5"
+										}`}
+									/>
+								</span>
+							</button>
+						</div>
 						{messages.map((msg) => (
-							<MessageBubble key={msg.id} msg={msg} />
+							<MessageBubble
+								key={msg.id}
+								msg={msg}
+								mode={showTranslated ? "translated" : "raw"}
+							/>
 						))}
 						<div ref={messagesEndRef} />
 					</div>
