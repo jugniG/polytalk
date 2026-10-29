@@ -38,7 +38,7 @@ export default function Translation() {
 	const { toast } = useToast();
 	const navigate = useNavigate();
 	const { data: session, isPending: isAuthPending } = authClient.useSession();
-	const { mics, speakers, hasPermission, requestPermission } = useDevices();
+	const { mics, hasPermission, requestPermission } = useDevices();
 
 	useEffect(() => {
 		if (!isAuthPending && !session?.user) {

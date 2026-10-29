@@ -4,12 +4,10 @@ export function LangCard({
 	label,
 	lang,
 	onLangChange,
-	highlight,
 }: {
 	label: "A" | "B";
 	lang: string;
 	onLangChange: (v: string) => void;
-	highlight?: boolean;
 }) {
 	const flag = getLangFlagUrl(lang);
 	return (
