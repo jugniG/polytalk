@@ -12,3 +12,5 @@ dist-ssr
 __unconfig*
 todos.json
 .vercel
+gcp-service-account.json
+public/failed-audios/
