@@ -40,52 +40,52 @@ const STEPS = [
 ];
 
 const PROBLEMS = [
-	{ emoji: "🇯🇵", scene: "Asking for directions in Tokyo" },
-	{ emoji: "🇪🇸", scene: "Ordering food in Barcelona" },
-	{ emoji: "🇸🇦", scene: "Negotiating at a market in Dubai" },
-	{ emoji: "🇫🇷", scene: "Chatting with locals in Paris" },
+	{ emoji: "🇮🇳", scene: "Haggling at Chandni Chowk" },
+	{ emoji: "🇮🇳", scene: "Doctor visit in a Tamil town" },
+	{ emoji: "🇮🇳", scene: "Bus conductor in Punjab" },
+	{ emoji: "🇮🇳", scene: "First day at a Bengaluru office" },
 ];
 
 const DEMO_CONVERSATIONS = [
 	{
-		fromFlag: "🇯🇵",
-		fromLang: "Japanese",
-		fromCountryCode: "JP",
-		toFlag: "🇬🇧",
+		fromFlag: "🇮🇳",
+		fromLang: "Hindi",
+		fromCountryCode: "IN",
+		toFlag: "🇮🇳",
 		toLang: "English",
-		toCountryCode: "GB",
-		sourceText: "すみません、近くに駅はありますか？",
-		translatedText: "Excuse me, is there a train station nearby?",
+		toCountryCode: "US",
+		sourceText: "मुझे सिटी सेंटर के लिए कौन सी बस चाहिए?",
+		translatedText: "Which bus do I need for the city centre?",
 	},
 	{
-		fromFlag: "🇬🇧",
+		fromFlag: "🇮🇳",
 		fromLang: "English",
-		fromCountryCode: "GB",
-		toFlag: "🇯🇵",
-		toLang: "Japanese",
-		toCountryCode: "JP",
-		sourceText: "Yes, it's two blocks straight ahead.",
-		translatedText: "はい、真っ直ぐ2ブロック先にあります。",
+		fromCountryCode: "US",
+		toFlag: "🇮🇳",
+		toLang: "Hindi",
+		toCountryCode: "IN",
+		sourceText: "Take the 460, get off after the metro station.",
+		translatedText: "460 बस पकड़िए, मेट्रो स्टेशन के बाद उतर जाइए।",
 	},
 	{
-		fromFlag: "🇪🇸",
-		fromLang: "Spanish",
-		fromCountryCode: "ES",
-		toFlag: "🇬🇧",
+		fromFlag: "🇮🇳",
+		fromLang: "Tamil",
+		fromCountryCode: "IN",
+		toFlag: "🇮🇳",
 		toLang: "English",
-		toCountryCode: "GB",
-		sourceText: "¿Cuánto cuesta este plato?",
-		translatedText: "How much does this dish cost?",
+		toCountryCode: "US",
+		sourceText: "இந்த மருந்து தினமும் சாப்பிட வேண்டுமா?",
+		translatedText: "Should I take this medicine every day?",
 	},
 	{
-		fromFlag: "🇬🇧",
+		fromFlag: "🇮🇳",
 		fromLang: "English",
-		fromCountryCode: "GB",
-		toFlag: "🇸🇦",
-		toLang: "Arabic",
-		toCountryCode: "SA",
-		sourceText: "Two coffees please, no sugar.",
-		translatedText: "قهوتين من فضلك، بدون سكر.",
+		fromCountryCode: "US",
+		toFlag: "🇮🇳",
+		toLang: "Punjabi",
+		toCountryCode: "IN",
+		sourceText: "The vegetables are fifty rupees for a kilo.",
+		translatedText: "ਸਬਜ਼ੀਆਂ ਪੰਜਾਹ ਰੁਪਏ ਕਿਲੋ ਹਨ।",
 	},
 ];
 
@@ -463,17 +463,17 @@ export default function Landing() {
 						The problem we solve
 					</p>
 					<h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-5 leading-tight">
-						You're standing in front of someone.
+						India has thousands of two-person conversations in
 						<br />
 						<span className="text-white/30">
-							Neither of you can say a word.
+							languages neither side is fluent in.
 						</span>
 					</h2>
 					<p className="text-center text-white/35 text-base md:text-lg max-w-2xl mx-auto mb-14 leading-relaxed">
-						You're a traveller. You meet locals, shopkeepers, hotel staff,
-						strangers who want to help — but the conversation stops before it
-						starts. Translation apps require you to type, wait, and show a
-						screen. That's not a conversation.
+						A Bihari shopkeeper meets a Tamil customer. A Hindi-speaking parent
+						meets an English-speaking teacher. Neither can say a word. Type-and-wait
+						translation apps break the moment real life happens — you look at
+						your screen, not each other. That's not a conversation.
 					</p>
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
 						{PROBLEMS.map(({ emoji, scene }) => (
@@ -526,13 +526,14 @@ export default function Landing() {
 			<section className="relative z-10 px-6 py-24 border-t border-white/[0.05]">
 				<div className="max-w-2xl mx-auto text-center flex flex-col items-center gap-6">
 					<h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
-						Your next trip, without
+						India speaks 22 official
 						<br />
-						<span className="text-white/30">language anxiety.</span>
+						<span className="text-white/30">languages. PolyTalk speaks them all.</span>
 					</h2>
 					<p className="text-white/35 text-base max-w-md leading-relaxed">
-						Open PolyTalk, pick your languages, and have a real conversation —
-						wherever you are in the world.
+						Open PolyTalk, pick your two languages, and just talk — at the
+						market, clinic, college, or office. Hindi talks to Tamil. Punjabi
+						talks to English. Family talks to you.
 					</p>
 					<Link to="/translate">
 						<button className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-zinc-950 font-semibold text-[15px] hover:bg-white/90 transition-all duration-200 active:scale-95">

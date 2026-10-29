@@ -6,7 +6,7 @@ import { useDevices } from "@/hooks/use-devices";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslationStream } from "@/hooks/use-translation-stream";
 import { useVoiceDetection } from "@/hooks/use-voice-detection";
-import { getLangFlag } from "./-actions";
+import { getLangFlag, LANGUAGES } from "./-actions";
 import { LangCard } from "./-components/langCard";
 import { type Message, MessageBubble } from "./-components/messageBubble";
 import { WaveformBars } from "./-components/waveformbars";
@@ -17,6 +17,8 @@ const IDLE_BAR_KEYS = Array.from(
 );
 
 function getLanguageCode(name: string) {
+	// "Punjabi" is missing from the langs package (its IANA name is "Panjabi")
+	if (name === "Punjabi") return "pa";
 	return langs.where("name", name)?.["1"] || "en";
 }
 
@@ -54,7 +56,7 @@ export default function Translation() {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [waveformData, setWaveformData] = useState<number[]>([]);
 
-	const [langA, setLangA] = useState("Japanese");
+	const [langA, setLangA] = useState("Hindi");
 	const [langB, setLangB] = useState("English");
 	const [micA, setMicA] = useState("default");
 	const [speakerA, setSpeakerA] = useState("default");
@@ -72,13 +74,17 @@ export default function Translation() {
 		if (typeof window === "undefined") return;
 		const savedLangA = window.localStorage.getItem("parley:langA");
 		const savedLangB = window.localStorage.getItem("parley:langB");
+
+		// ignore languages saved before the Indian-languages-only catalog
+		const isKnown = (name: string | null) =>
+			!!name && LANGUAGES.some((l) => l.name === name);
+		if (isKnown(savedLangA)) setLangA(savedLangA);
+		if (isKnown(savedLangB)) setLangB(savedLangB);
 		const savedMicA = window.localStorage.getItem("parley:micA");
 		const savedMicB = window.localStorage.getItem("parley:micB");
 		const savedSpeakerA = window.localStorage.getItem("parley:speakerA");
 		const savedSpeakerB = window.localStorage.getItem("parley:speakerB");
 
-		if (savedLangA) setLangA(savedLangA);
-		if (savedLangB) setLangB(savedLangB);
 		if (savedMicA) setMicA(savedMicA);
 		if (savedMicB) setMicB(savedMicB);
 		if (savedSpeakerA) setSpeakerA(savedSpeakerA);

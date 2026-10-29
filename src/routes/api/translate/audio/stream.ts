@@ -16,28 +16,15 @@ import {
 const defaultLocales: Record<string, string> = {
 	en: "en-US",
 	hi: "hi-IN",
-	fr: "fr-FR",
-	de: "de-DE",
-	es: "es-ES",
-	pt: "pt-BR",
-	zh: "zh-CN",
-	ja: "ja-JP",
-	ko: "ko-KR",
-	ru: "ru-RU",
-	it: "it-IT",
-	ar: "ar-SA",
-	tr: "tr-TR",
-	nl: "nl-NL",
-	sv: "sv-SE",
-	pl: "pl-PL",
-	id: "id-ID",
-	vi: "vi-VN",
-	th: "th-TH",
 	bn: "bn-BD",
+	ta: "ta-IN",
+	te: "te-IN",
+	mr: "mr-IN",
+	gu: "gu-IN",
+	kn: "kn-IN",
+	ml: "ml-IN",
 	ur: "ur-PK",
-	ms: "ms-MY",
-	tl: "tl-PH",
-	el: "el-GR",
+	pa: "pa-Guru-IN",
 };
 
 export function langToLocale(lang: string) {
@@ -112,7 +99,12 @@ const serviceAccountPath = resolve(
 	process.cwd(),
 	env.GOOGLE_SERVICE_ACCOUNT_FILE,
 );
-const speechEndpoint = `${env.GOOGLE_STT_REGION}-speech.googleapis.com`;
+// "global" location must use the global endpoint host; regional locations
+// prepend the region (e.g. asia-south1-speech.googleapis.com)
+const speechEndpoint =
+	env.GOOGLE_STT_REGION === "global"
+		? "speech.googleapis.com"
+		: `${env.GOOGLE_STT_REGION}-speech.googleapis.com`;
 const sttClient = existsSync(serviceAccountPath)
 	? new speech.v2.SpeechClient({
 			keyFilename: serviceAccountPath,
