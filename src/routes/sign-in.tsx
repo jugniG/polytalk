@@ -61,6 +61,43 @@ function SignIn() {
           </p>
         </div>
 
+        <button
+          type="button"
+          onClick={() =>
+            void authClient.signIn.social({
+              provider: "google",
+              callbackURL: "/translate",
+            })
+          }
+          className="flex h-10 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] text-sm font-medium text-white transition hover:bg-white/[0.08]"
+        >
+          <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+            <path
+              fill="#EA4335"
+              d="M12 10.2v3.9h5.5c-.24 1.3-.96 2.4-2 3.1l3.2 2.5c1.9-1.75 3-4.3 3-7.3 0-.7-.06-1.37-.18-2H12z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 22c2.7 0 4.97-.9 6.63-2.43l-3.2-2.5c-.89.6-2.03.95-3.43.95-2.64 0-4.88-1.78-5.68-4.18l-3.32 2.57C4.66 19.98 8.09 22 12 22z"
+            />
+            <path
+              fill="#4A90E2"
+              d="M6.32 13.84A5.99 5.99 0 0 1 6 12c0-.64.11-1.25.32-1.84L2.99 7.59A9.99 9.99 0 0 0 2 12c0 1.61.38 3.13 1.06 4.47l3.26-2.63z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M12 6c1.47 0 2.8.5 3.84 1.49l2.88-2.88C16.97 3 14.7 2 12 2 8.09 2 4.66 4.02 2.99 7.59l3.33 2.57C7.12 7.78 9.36 6 12 6z"
+            />
+          </svg>
+          Continue with Google
+        </button>
+
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-white/10" />
+          <span className="text-[10px] uppercase tracking-widest text-white/30">or</span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
+
         <form onSubmit={handleSubmit} className="grid gap-4">
           {isSignUp && (
             <div className="grid gap-2">
