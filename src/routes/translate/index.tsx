@@ -195,6 +195,11 @@ export default function Translation() {
 				},
 				(result) => {
 					if (!result.userTranscript.trim()) {
+						toast({
+							title: "No speech detected",
+							description:
+								"I couldn't hear anything — hold the button while you speak, and check your mic isn't muted.",
+						});
 						setLiveTranscript("");
 						setLiveTranslation("");
 						return;

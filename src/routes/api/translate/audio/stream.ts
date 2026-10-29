@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
 import speech from "@google-cloud/speech";
 import { createFileRoute } from "@tanstack/react-router";
 import { storage } from "#/db/storage";
@@ -59,18 +59,25 @@ async function persistDebugAudio(args: {
 	const fileName = `debug-${args.reason}-${timestamp}.${extension}`;
 	const filePath = resolve(process.cwd(), "public", "failed-audios", fileName);
 
-	await writeFile(filePath, args.audioBuffer);
+	try {
+		await mkdir(dirname(filePath), { recursive: true });
+		await writeFile(filePath, args.audioBuffer);
 
-	console.log("[audio stream] debug audio saved", {
-		reason: args.reason,
-		fileName,
-		filePath,
-		audioBytes: args.audioBuffer.length,
-		mimeType: args.mimeType || "unknown",
-		detectedFormat: args.detectedFormat,
-	});
+		console.log("[audio stream] debug audio saved", {
+			reason: args.reason,
+			fileName,
+			filePath,
+			audioBytes: args.audioBuffer.length,
+			mimeType: args.mimeType || "unknown",
+			detectedFormat: args.detectedFormat,
+		});
 
-	return { fileName, filePath };
+		return { fileName, filePath };
+	} catch (error) {
+		// debug persistence must never break the user-facing flow
+		console.warn("[audio stream] could not save debug audio", error);
+		return { fileName, filePath };
+	}
 }
 
 function getErrorMessage(error: unknown) {
