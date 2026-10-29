@@ -38,25 +38,13 @@ export default function Translation() {
 	const { toast } = useToast();
 	const navigate = useNavigate();
 	const { data: session, isPending: isAuthPending } = authClient.useSession();
+	const { mics, speakers, hasPermission, requestPermission } = useDevices();
 
 	useEffect(() => {
 		if (!isAuthPending && !session?.user) {
 			void navigate({ to: "/sign-in" });
 		}
 	}, [isAuthPending, session, navigate]);
-
-	if (isAuthPending) {
-		return (
-			<div className="h-[100dvh] w-full flex items-center justify-center bg-[#0c0c0e] text-white">
-				<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-			</div>
-		);
-	}
-
-	if (!session?.user) {
-		return null;
-	}
-	const { mics, speakers, hasPermission, requestPermission } = useDevices();
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [waveformData, setWaveformData] = useState<number[]>([]);
 
@@ -446,6 +434,18 @@ export default function Translation() {
 			}
 		};
 	}, [stopListening, stopTranslationStream]);
+
+	if (isAuthPending) {
+		return (
+			<div className="h-[100dvh] w-full flex items-center justify-center bg-[#0c0c0e] text-white">
+				<div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+			</div>
+		);
+	}
+
+	if (!session?.user) {
+		return null;
+	}
 
 	return (
 		<div className="h-[100dvh] w-full flex flex-col bg-[#0c0c0e] text-white overflow-hidden">
