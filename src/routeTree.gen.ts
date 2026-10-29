@@ -9,25 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MicCheckRouteImport } from './routes/mic-check'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TranslateIndexRouteImport } from './routes/translate/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
-import { Route as DemoDrizzleRouteImport } from './routes/demo/drizzle'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as MicCheckRouteImport } from './routes/mic-check'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
-import { Route as ApiConversationsIndexRouteImport } from './routes/api/conversations/index'
-import { Route as DemoSentryTestingRouteImport } from './routes/demo/sentry.testing'
+import { Route as DemoDrizzleRouteImport } from './routes/demo/drizzle'
+import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
+import { Route as TranslateIndexRouteImport } from './routes/translate/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as DemoSentryTestingRouteImport } from './routes/demo/sentry.testing'
 import { Route as ApiTranslateAudioIndexRouteImport } from './routes/api/translate/audio/index'
-import { Route as ApiConversationsIdIndexRouteImport } from './routes/api/conversations/$id/index'
-import { Route as ApiTranslateAudioTtsRouteImport } from './routes/api/translate/audio/tts'
 import { Route as ApiTranslateAudioStreamRouteImport } from './routes/api/translate/audio/stream'
-import { Route as ApiConversationsIdMessagesIndexRouteImport } from './routes/api/conversations/$id/messages/index'
+import { Route as ApiTranslateAudioTtsRouteImport } from './routes/api/translate/audio/tts'
 
-const MicCheckRoute = MicCheckRouteImport.update({
-  id: '/mic-check',
-  path: '/mic-check',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -35,24 +32,9 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TranslateIndexRoute = TranslateIndexRouteImport.update({
-  id: '/translate/',
-  path: '/translate/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoDrizzleRoute = DemoDrizzleRouteImport.update({
-  id: '/demo/drizzle',
-  path: '/demo/drizzle',
+const MicCheckRoute = MicCheckRouteImport.update({
+  id: '/mic-check',
+  path: '/mic-check',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoBetterAuthRoute = DemoBetterAuthRouteImport.update({
@@ -60,14 +42,19 @@ const DemoBetterAuthRoute = DemoBetterAuthRouteImport.update({
   path: '/demo/better-auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConversationsIndexRoute = ApiConversationsIndexRouteImport.update({
-  id: '/api/conversations/',
-  path: '/api/conversations/',
+const DemoDrizzleRoute = DemoDrizzleRouteImport.update({
+  id: '/demo/drizzle',
+  path: '/demo/drizzle',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoSentryTestingRoute = DemoSentryTestingRouteImport.update({
-  id: '/demo/sentry/testing',
-  path: '/demo/sentry/testing',
+const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
+  id: '/demo/tanstack-query',
+  path: '/demo/tanstack-query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TranslateIndexRoute = TranslateIndexRouteImport.update({
+  id: '/translate/',
+  path: '/translate/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -75,19 +62,14 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoSentryTestingRoute = DemoSentryTestingRouteImport.update({
+  id: '/demo/sentry/testing',
+  path: '/demo/sentry/testing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTranslateAudioIndexRoute = ApiTranslateAudioIndexRouteImport.update({
   id: '/api/translate/audio/',
   path: '/api/translate/audio/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConversationsIdIndexRoute = ApiConversationsIdIndexRouteImport.update({
-  id: '/api/conversations/$id/',
-  path: '/api/conversations/$id/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiTranslateAudioTtsRoute = ApiTranslateAudioTtsRouteImport.update({
-  id: '/api/translate/audio/tts',
-  path: '/api/translate/audio/tts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTranslateAudioStreamRoute = ApiTranslateAudioStreamRouteImport.update({
@@ -95,12 +77,11 @@ const ApiTranslateAudioStreamRoute = ApiTranslateAudioStreamRouteImport.update({
   path: '/api/translate/audio/stream',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConversationsIdMessagesIndexRoute =
-  ApiConversationsIdMessagesIndexRouteImport.update({
-    id: '/api/conversations/$id/messages/',
-    path: '/api/conversations/$id/messages/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const ApiTranslateAudioTtsRoute = ApiTranslateAudioTtsRouteImport.update({
+  id: '/api/translate/audio/tts',
+  path: '/api/translate/audio/tts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -112,12 +93,9 @@ export interface FileRoutesByFullPath {
   '/translate/': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/demo/sentry/testing': typeof DemoSentryTestingRoute
-  '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
   '/api/translate/audio/tts': typeof ApiTranslateAudioTtsRoute
-  '/api/conversations/$id/': typeof ApiConversationsIdIndexRoute
   '/api/translate/audio/': typeof ApiTranslateAudioIndexRoute
-  '/api/conversations/$id/messages/': typeof ApiConversationsIdMessagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -129,12 +107,9 @@ export interface FileRoutesByTo {
   '/translate': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/demo/sentry/testing': typeof DemoSentryTestingRoute
-  '/api/conversations': typeof ApiConversationsIndexRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
   '/api/translate/audio/tts': typeof ApiTranslateAudioTtsRoute
-  '/api/conversations/$id': typeof ApiConversationsIdIndexRoute
   '/api/translate/audio': typeof ApiTranslateAudioIndexRoute
-  '/api/conversations/$id/messages': typeof ApiConversationsIdMessagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -147,12 +122,9 @@ export interface FileRoutesById {
   '/translate/': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/demo/sentry/testing': typeof DemoSentryTestingRoute
-  '/api/conversations/': typeof ApiConversationsIndexRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
   '/api/translate/audio/tts': typeof ApiTranslateAudioTtsRoute
-  '/api/conversations/$id/': typeof ApiConversationsIdIndexRoute
   '/api/translate/audio/': typeof ApiTranslateAudioIndexRoute
-  '/api/conversations/$id/messages/': typeof ApiConversationsIdMessagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -166,12 +138,9 @@ export interface FileRouteTypes {
     | '/translate/'
     | '/api/auth/$'
     | '/demo/sentry/testing'
-    | '/api/conversations/'
     | '/api/translate/audio/stream'
     | '/api/translate/audio/tts'
-    | '/api/conversations/$id/'
     | '/api/translate/audio/'
-    | '/api/conversations/$id/messages/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -183,12 +152,9 @@ export interface FileRouteTypes {
     | '/translate'
     | '/api/auth/$'
     | '/demo/sentry/testing'
-    | '/api/conversations'
     | '/api/translate/audio/stream'
     | '/api/translate/audio/tts'
-    | '/api/conversations/$id'
     | '/api/translate/audio'
-    | '/api/conversations/$id/messages'
   id:
     | '__root__'
     | '/'
@@ -200,12 +166,9 @@ export interface FileRouteTypes {
     | '/translate/'
     | '/api/auth/$'
     | '/demo/sentry/testing'
-    | '/api/conversations/'
     | '/api/translate/audio/stream'
     | '/api/translate/audio/tts'
-    | '/api/conversations/$id/'
     | '/api/translate/audio/'
-    | '/api/conversations/$id/messages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -218,21 +181,18 @@ export interface RootRouteChildren {
   TranslateIndexRoute: typeof TranslateIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   DemoSentryTestingRoute: typeof DemoSentryTestingRoute
-  ApiConversationsIndexRoute: typeof ApiConversationsIndexRoute
   ApiTranslateAudioStreamRoute: typeof ApiTranslateAudioStreamRoute
   ApiTranslateAudioTtsRoute: typeof ApiTranslateAudioTtsRoute
-  ApiConversationsIdIndexRoute: typeof ApiConversationsIdIndexRoute
   ApiTranslateAudioIndexRoute: typeof ApiTranslateAudioIndexRoute
-  ApiConversationsIdMessagesIndexRoute: typeof ApiConversationsIdMessagesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/mic-check': {
-      id: '/mic-check'
-      path: '/mic-check'
-      fullPath: '/mic-check'
-      preLoaderRoute: typeof MicCheckRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -242,32 +202,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/translate/': {
-      id: '/translate/'
-      path: '/translate'
-      fullPath: '/translate/'
-      preLoaderRoute: typeof TranslateIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/drizzle': {
-      id: '/demo/drizzle'
-      path: '/demo/drizzle'
-      fullPath: '/demo/drizzle'
-      preLoaderRoute: typeof DemoDrizzleRouteImport
+    '/mic-check': {
+      id: '/mic-check'
+      path: '/mic-check'
+      fullPath: '/mic-check'
+      preLoaderRoute: typeof MicCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/better-auth': {
@@ -277,18 +216,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoBetterAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/conversations/': {
-      id: '/api/conversations/'
-      path: '/api/conversations'
-      fullPath: '/api/conversations/'
-      preLoaderRoute: typeof ApiConversationsIndexRouteImport
+    '/demo/drizzle': {
+      id: '/demo/drizzle'
+      path: '/demo/drizzle'
+      fullPath: '/demo/drizzle'
+      preLoaderRoute: typeof DemoDrizzleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/sentry/testing': {
-      id: '/demo/sentry/testing'
-      path: '/demo/sentry/testing'
-      fullPath: '/demo/sentry/testing'
-      preLoaderRoute: typeof DemoSentryTestingRouteImport
+    '/demo/tanstack-query': {
+      id: '/demo/tanstack-query'
+      path: '/demo/tanstack-query'
+      fullPath: '/demo/tanstack-query'
+      preLoaderRoute: typeof DemoTanstackQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/translate/': {
+      id: '/translate/'
+      path: '/translate'
+      fullPath: '/translate/'
+      preLoaderRoute: typeof TranslateIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -298,25 +244,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/sentry/testing': {
+      id: '/demo/sentry/testing'
+      path: '/demo/sentry/testing'
+      fullPath: '/demo/sentry/testing'
+      preLoaderRoute: typeof DemoSentryTestingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/translate/audio/': {
       id: '/api/translate/audio/'
       path: '/api/translate/audio'
       fullPath: '/api/translate/audio/'
       preLoaderRoute: typeof ApiTranslateAudioIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/conversations/$id/': {
-      id: '/api/conversations/$id/'
-      path: '/api/conversations/$id'
-      fullPath: '/api/conversations/$id/'
-      preLoaderRoute: typeof ApiConversationsIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/translate/audio/tts': {
-      id: '/api/translate/audio/tts'
-      path: '/api/translate/audio/tts'
-      fullPath: '/api/translate/audio/tts'
-      preLoaderRoute: typeof ApiTranslateAudioTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/translate/audio/stream': {
@@ -326,11 +265,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTranslateAudioStreamRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/conversations/$id/messages/': {
-      id: '/api/conversations/$id/messages/'
-      path: '/api/conversations/$id/messages'
-      fullPath: '/api/conversations/$id/messages/'
-      preLoaderRoute: typeof ApiConversationsIdMessagesIndexRouteImport
+    '/api/translate/audio/tts': {
+      id: '/api/translate/audio/tts'
+      path: '/api/translate/audio/tts'
+      fullPath: '/api/translate/audio/tts'
+      preLoaderRoute: typeof ApiTranslateAudioTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -346,12 +285,9 @@ const rootRouteChildren: RootRouteChildren = {
   TranslateIndexRoute: TranslateIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   DemoSentryTestingRoute: DemoSentryTestingRoute,
-  ApiConversationsIndexRoute: ApiConversationsIndexRoute,
   ApiTranslateAudioStreamRoute: ApiTranslateAudioStreamRoute,
   ApiTranslateAudioTtsRoute: ApiTranslateAudioTtsRoute,
-  ApiConversationsIdIndexRoute: ApiConversationsIdIndexRoute,
   ApiTranslateAudioIndexRoute: ApiTranslateAudioIndexRoute,
-  ApiConversationsIdMessagesIndexRoute: ApiConversationsIdMessagesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
