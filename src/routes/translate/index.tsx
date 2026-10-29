@@ -49,10 +49,7 @@ export default function Translation() {
 	const [waveformData, setWaveformData] = useState<number[]>([]);
 
 	const [langA, setLangA] = useState("Hindi");
-	const [langB, setLangB] = useState("English");	const [micA, setMicA] = useState("default");
-	const [speakerA, setSpeakerA] = useState("default");
-	const [micB, setMicB] = useState("default");
-	const [speakerB, setSpeakerB] = useState("default");
+	const [langB, setLangB] = useState("English");	const [mic, setMic] = useState("default");
 	const [activeSide, setActiveSide] = useState<"A" | "B">("A");
 	const [liveTranscript, setLiveTranscript] = useState("");
 	const [liveTranslation, setLiveTranslation] = useState("");
@@ -72,15 +69,8 @@ export default function Translation() {
 			!!name && LANGUAGES.some((l) => l.name === name);
 		if (isKnown(savedLangA)) setLangA(savedLangA);
 		if (isKnown(savedLangB)) setLangB(savedLangB);
-		const savedMicA = window.localStorage.getItem("parley:micA");
-		const savedMicB = window.localStorage.getItem("parley:micB");
-		const savedSpeakerA = window.localStorage.getItem("parley:speakerA");
-		const savedSpeakerB = window.localStorage.getItem("parley:speakerB");
-
-		if (savedMicA) setMicA(savedMicA);
-		if (savedMicB) setMicB(savedMicB);
-		if (savedSpeakerA) setSpeakerA(savedSpeakerA);
-		if (savedSpeakerB) setSpeakerB(savedSpeakerB);
+		const savedMic = window.localStorage.getItem("parley:mic");
+		if (savedMic) setMic(savedMic);
 	}, []);
 
 	useEffect(() => {
@@ -91,11 +81,8 @@ export default function Translation() {
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
-		window.localStorage.setItem("parley:micA", micA);
-		window.localStorage.setItem("parley:micB", micB);
-		window.localStorage.setItem("parley:speakerA", speakerA);
-		window.localStorage.setItem("parley:speakerB", speakerB);
-	}, [micA, micB, speakerA, speakerB]);
+		window.localStorage.setItem("parley:mic", mic);
+	}, [mic]);
 	const [status, setStatus] = useState<"idle" | "recording" | "processing">(
 		"idle",
 	);
@@ -168,7 +155,6 @@ export default function Translation() {
 
 		const primaryLanguageCode = getLanguageCode(langA);
 		const secondaryLanguage = getLanguageCode(langB);
-		const targetSpeaker = activeSide === "A" ? speakerB : speakerA;
 
 		if (
 			!primaryLanguageCode ||
@@ -234,7 +220,7 @@ export default function Translation() {
 						void playTranslatedAudio(
 							result.translatedText,
 							result.targetLang,
-							targetSpeaker,
+							"default",
 						);
 					}
 
@@ -397,7 +383,7 @@ export default function Translation() {
 					await requestPermission();
 				}
 
-				const activeMic = activeSide === "A" ? micA : micB;
+				const activeMic = mic;
 				await startListening(activeMic);
 			} catch {
 				toast({
@@ -461,6 +447,20 @@ export default function Translation() {
 				</Link>
 
 				<div className="flex items-center gap-2">
+					<select
+						value={mic}
+						onChange={(e) => setMic(e.target.value)}
+						className="h-7 max-w-[140px] rounded-full border border-white/10 bg-white/[0.04] px-3 text-[10px] uppercase tracking-[0.12em] text-white/60 outline-none cursor-pointer appearance-none [&>option]:bg-zinc-900 [&>option]:text-white"
+						title="Microphone"
+						data-testid="select-mic-global"
+					>
+						<option value="default">Default mic</option>
+						{mics.map((d) => (
+							<option key={d.deviceId} value={d.deviceId}>
+								{d.label || `Mic ${d.deviceId.slice(0, 6)}`}
+							</option>
+						))}
+					</select>
 					<Link
 						to="/mic-check"
 						className="flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
@@ -503,12 +503,6 @@ export default function Translation() {
 							label="A"
 							lang={langA}
 							onLangChange={setLangA}
-							mic={micA}
-							onMicChange={setMicA}
-							speaker={speakerA}
-							onSpeakerChange={setSpeakerA}
-							mics={mics}
-							speakers={speakers}
 						/>
 					</div>
 
@@ -533,19 +527,13 @@ export default function Translation() {
 							label="B"
 							lang={langB}
 							onLangChange={setLangB}
-							mic={micB}
-							onMicChange={setMicB}
-							speaker={speakerB}
-							onSpeakerChange={setSpeakerB}
-							mics={mics}
-							speakers={speakers}
 						/>
 					</div>
 				</div>
 
 				{/* Hint */}
 				<p className="mt-2.5 text-center text-[10px] text-white/50 leading-snug">
-					Each person's mic &amp; speaker can be set independently
+					Each person's language can be set independently
 				</p>
 			</div>
 
