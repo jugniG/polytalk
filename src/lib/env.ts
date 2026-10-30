@@ -6,7 +6,8 @@ const envSchema = z.object({
 	GOOGLE_TTS_VOICE_NAME: z.string().optional(),
 	GOOGLE_STT_API_KEY: z.string(),
 	GOOGLE_CLOUD_PROJECT_ID: z.string(),
-	GOOGLE_SERVICE_ACCOUNT_FILE: z.string(),
+	GOOGLE_SERVICE_ACCOUNT_FILE: z.string().optional(),
+	GOOGLE_SERVICE_ACCOUNT_BASE64: z.string().optional(),
 	GOOGLE_STT_REGION: z.string(),
 	GOOGLE_STT_MODEL: z.string(),
 });

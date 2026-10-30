@@ -96,10 +96,20 @@ function getErrorMessage(error: unknown) {
 	return "Streaming translation failed";
 }
 
-const serviceAccountPath = resolve(
-	process.cwd(),
-	env.GOOGLE_SERVICE_ACCOUNT_FILE,
-);
+const serviceAccountPath = env.GOOGLE_SERVICE_ACCOUNT_FILE
+	? resolve(process.cwd(), env.GOOGLE_SERVICE_ACCOUNT_FILE)
+	: null;
+
+// On Vercel there is no project filesystem — the service account is
+// passed as base64-encoded JSON instead of a file path (local dev keeps
+// using the file).
+const serviceAccountCredentials = env.GOOGLE_SERVICE_ACCOUNT_BASE64
+	? JSON.parse(
+			Buffer.from(env.GOOGLE_SERVICE_ACCOUNT_BASE64, "base64").toString(
+				"utf8",
+			),
+		)
+	: null;
 
 const ts = () =>
 	new Date().toLocaleTimeString("en-GB", {
@@ -114,18 +124,27 @@ const speechEndpoint =
 	env.GOOGLE_STT_REGION === "global"
 		? "speech.googleapis.com"
 		: `${env.GOOGLE_STT_REGION}-speech.googleapis.com`;
-const sttClient = existsSync(serviceAccountPath)
+const sttClient = serviceAccountCredentials
 	? new speech.v2.SpeechClient({
-			keyFilename: serviceAccountPath,
+			credentials: serviceAccountCredentials,
 			apiEndpoint: speechEndpoint,
 		})
-	: null;
+	: serviceAccountPath && existsSync(serviceAccountPath)
+		? new speech.v2.SpeechClient({
+				keyFilename: serviceAccountPath,
+				apiEndpoint: speechEndpoint,
+			})
+		: null;
 
 console.log(`[${ts()}] [stt] client init`, {
 	endpoint: speechEndpoint,
 	region: env.GOOGLE_STT_REGION,
 	model: env.GOOGLE_STT_MODEL || "short",
-	serviceAccountFile: env.GOOGLE_SERVICE_ACCOUNT_FILE,
+	credentialsSource: serviceAccountCredentials
+		? "base64-env"
+		: serviceAccountPath && existsSync(serviceAccountPath)
+			? "file"
+			: "none",
 	clientReady: !!sttClient,
 });
 
@@ -142,7 +161,7 @@ async function transcribeWithGoogle(
 
 	if (!sttClient) {
 		throw new Error(
-			`Google STT service account file not found at ${serviceAccountPath}`,
+			"Google STT service account not configured. Set GOOGLE_SERVICE_ACCOUNT_BASE64 (or GOOGLE_SERVICE_ACCOUNT_FILE locally).",
 		);
 	}
 
