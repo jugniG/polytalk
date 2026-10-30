@@ -29,7 +29,9 @@ export function MessageBubble({
 }) {
 	const showRaw = mode === "raw";
 	const text = (showRaw ? msg.sourceText : msg.translatedText) || msg.translatedText;
-	const langCode = showRaw ? msg.lang : (msg.targetLang ?? msg.lang);
+	// Flag/label always reflects the language that was SPOKEN, in both
+	// modes — the Raw⇄Translated switch only changes the text.
+	const langCode = msg.lang;
 	const langName = codeToLangName(langCode);
 
 	return (
