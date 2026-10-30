@@ -166,7 +166,9 @@ export function useVoiceDetection({
 				});
 				if (chunksRef.current.length > 0) {
 					const paddedBlob = await addAudioPadding(blob);
-					onVoiceEnd?.(paddedBlob);
+					if (paddedBlob) {
+						onVoiceEnd?.(paddedBlob);
+					}
 				}
 				chunksRef.current = [];
 				setIsRecording(false);
