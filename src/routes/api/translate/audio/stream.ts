@@ -62,7 +62,7 @@ async function persistDebugAudio(args: {
 		await mkdir(dirname(filePath), { recursive: true });
 		await writeFile(filePath, args.audioBuffer);
 
-		console.log("[audio stream] debug audio saved", {
+		console.log(`[${ts()}] [audio stream] debug audio saved`, {
 			reason: args.reason,
 			fileName,
 			filePath,
@@ -103,6 +103,14 @@ const serviceAccountPath = resolve(
 	process.cwd(),
 	env.GOOGLE_SERVICE_ACCOUNT_FILE,
 );
+
+const ts = () =>
+	new Date().toLocaleTimeString("en-GB", {
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: false,
+	});
 // "global" location must use the global endpoint host; regional locations
 // prepend the region (e.g. asia-south1-speech.googleapis.com)
 const speechEndpoint =
@@ -116,7 +124,7 @@ const sttClient = existsSync(serviceAccountPath)
 		})
 	: null;
 
-console.log("[stt] client init", {
+console.log(`[${ts()}] [stt] client init`, {
 	endpoint: speechEndpoint,
 	region: env.GOOGLE_STT_REGION,
 	model: env.GOOGLE_STT_MODEL || "short",
@@ -143,7 +151,7 @@ async function transcribeWithGoogle(
 
 	const sttModel = env.GOOGLE_STT_MODEL || "short";
 	const recognizerPath = `projects/${env.GOOGLE_CLOUD_PROJECT_ID}/locations/${env.GOOGLE_STT_REGION}/recognizers/_`;
-	console.log("[google stt] recognize request", {
+	console.log(`[${ts()}] [google stt] recognize request`, {
 		model: sttModel,
 		region: env.GOOGLE_STT_REGION,
 	});
@@ -186,7 +194,7 @@ async function transcribeWithGoogle(
 		.join(" ")
 		.trim();
 
-	console.log("[google stt] recognize response", {
+	console.log(`[${ts()}] [google stt] recognize response`, {
 		resultCount: response.results?.length || 0,
 		transcriptLength: transcript?.length,
 	});
@@ -234,7 +242,7 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 						langToLocale(primaryLang),
 						langToLocale(secondaryLanguage),
 					];
-					console.log("[audio stream] request received", {
+					console.log(`[${ts()}] [audio stream] request received`, {
 						sizeKB: (audioBuffer.length / 1024).toFixed(1),
 						mimeType: audioMimeType || "unknown",
 						detectedFormat,
@@ -300,7 +308,7 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 											detectedFormat,
 											reason: "empty-transcript",
 										});
-										console.log("[audio stream] no transcript returned", {
+										console.log(`[${ts()}] [audio stream] no transcript returned`, {
 											languageCodes,
 										});
 										enqueue("done", {
@@ -317,7 +325,7 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 
 									const detectedLanguage =
 										await detectLanguageFromTranscript(userTranscript);
-									console.log("[audio stream] transcript resolved", {
+									console.log(`[${ts()}] [audio stream] transcript resolved`, {
 										userTranscript,
 										detectedLanguage,
 										primaryLang,
@@ -345,7 +353,7 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 										targetLang,
 									);
 
-									console.log("[audio stream] translation complete", {
+									console.log(`[${ts()}] [audio stream] translation complete`, {
 										sourceLang,
 										targetLang,
 										userTranscript,
@@ -362,7 +370,7 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 										targetLang,
 									});
 
-									console.log("[audio stream] completed", {
+									console.log(`[${ts()}] [audio stream] completed`, {
 										userTranscriptLength: userTranscript.length,
 										translatedLength: translatedText.length,
 									});

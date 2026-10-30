@@ -2,6 +2,14 @@ import { LingoDotDevEngine } from "lingo.dev/sdk";
 
 const languageNames = new Intl.DisplayNames(["en"], { type: "language" });
 
+const ts = () =>
+	new Date().toLocaleTimeString("en-GB", {
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: false,
+	});
+
 function codeToName(code: string): string {
 	return languageNames.of(code)?.toLowerCase() || code.toLowerCase();
 }
@@ -15,7 +23,7 @@ export async function translateText(
 		throw new Error("Missing source or target language for translation");
 	}
 
-	console.log("[translation client] request payload", {
+	console.log(`[${ts()}] [translation client] request payload`, {
 		text,
 		sourceLocale,
 		targetLocale,
@@ -46,7 +54,7 @@ export async function translateText(
 	}
 
 	const { data } = await response.json();
-	console.log("[translation client] translated", text, "to", data?.text);
+	console.log(`[${ts()}] [translation client] translated`, text, "to", data?.text);
 
 	return data?.text;
 }
@@ -56,7 +64,7 @@ export async function detectLanguageFromTranscript(transcript: string) {
 		apiKey: process.env.LINGODOTDEV_API_KEY,
 	});
 	const locale = await lingoDotDev.recognizeLocale(transcript);
-	console.log("[detectLanguageFromTranscript]", { transcript, locale });
+	console.log(`[${ts()}] [detectLanguageFromTranscript]`, { transcript, locale });
 	return locale
 }
 
