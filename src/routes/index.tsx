@@ -413,10 +413,6 @@ export default function Landing() {
 				<div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
 					{/* Left — copy */}
 					<div className="flex-1 flex flex-col items-start text-left max-w-xl">
-						<div className="mb-7 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.04] text-white/40 text-xs font-medium tracking-widest uppercase">
-							<span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 animate-pulse" />
-							Real-time · 100+ languages · No account needed
-						</div>
 
 						<h1 className="font-display text-[clamp(2.4rem,6vw,5rem)] font-bold leading-[1.04] tracking-tight text-white mb-6">
 							The language barrier
