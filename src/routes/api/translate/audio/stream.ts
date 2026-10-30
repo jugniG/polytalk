@@ -155,7 +155,7 @@ async function transcribeWithGoogle(
 		detectedFormat === "webm"
 			? {
 					explicitDecodingConfig: {
-						encoding: "WEBM_OPUS",
+						encoding: "WEBM_OPUS" as "WEBM_OPUS",
 						sampleRateHertz: 48000,
 						audioChannelCount: 1,
 					},
@@ -163,7 +163,7 @@ async function transcribeWithGoogle(
 			: detectedFormat === "ogg"
 				? {
 						explicitDecodingConfig: {
-							encoding: "OGG_OPUS",
+							encoding: "OGG_OPUS" as "OGG_OPUS",
 							sampleRateHertz: 48000,
 							audioChannelCount: 1,
 						},
