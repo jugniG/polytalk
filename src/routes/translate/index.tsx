@@ -427,7 +427,7 @@ export default function Translation() {
 
 	return (
 		<div className="h-[100dvh] w-full flex flex-col bg-[#0c0c0e] text-white overflow-hidden">
-			<header className="flex-shrink-0 flex items-center justify-between px-4 py-4 border-b border-white/[0.06]">
+			<header className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 py-3 sm:py-4 border-b border-white/[0.06]">
 				<Link to="/">
 					<button
 						className="flex items-center gap-2  hover:text-white/70 transition-colors"
@@ -438,7 +438,7 @@ export default function Translation() {
 					</button>
 				</Link>
 
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 flex-wrap">
 					<select
 						value={mic}
 						onChange={(e) => setMic(e.target.value)}
