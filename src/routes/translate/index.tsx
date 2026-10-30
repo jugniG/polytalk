@@ -12,10 +12,6 @@ import { LangCard } from "./-components/langCard";
 import { type Message, MessageBubble } from "./-components/messageBubble";
 import { WaveformBars } from "./-components/waveformbars";
 
-const IDLE_BAR_KEYS = Array.from(
-	{ length: 24 },
-	(_, index) => `idle-bar-${index}`,
-);
 
 function getLanguageCode(name: string) {
 	// "Punjabi" is missing from the langs package (its IANA name is "Panjabi")

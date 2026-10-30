@@ -181,8 +181,8 @@ async function transcribeWithGoogle(
 	});
 
 	const transcript = response.results
-		?.flatMap((result) => result.alternatives || [])
-		.map((alternative) => alternative.transcript || "")
+		?.flatMap((result: any) => result.alternatives || [])
+		.map((alternative: any) => alternative.transcript || "")
 		.join(" ")
 		.trim();
 
