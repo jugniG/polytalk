@@ -37,7 +37,7 @@ export function useVoiceDetection({
 
 	// Add silence padding to audio blob
 	const addAudioPadding = useCallback(
-		async (audioBlob: Blob): Promise<Blob> => {
+		async (audioBlob: Blob): Promise<Blob | null> => {
 			if (paddingDuration <= 0) {
 				return audioBlob;
 			}
@@ -123,7 +123,10 @@ export function useVoiceDetection({
 				return new Blob([arrayBufferNew], { type: "audio/wav" });
 			} catch (error) {
 				console.error("Failed to add audio padding:", error);
-				return audioBlob;
+				// If the recording can't even be decoded by the browser, it's
+				// almost certainly too short/truncated to be useful speech —
+				// drop it instead of forwarding undecodable audio to STT.
+				return null;
 			}
 		},
 		[paddingDuration],
@@ -343,7 +346,9 @@ export function useVoiceDetection({
 					});
 					if (chunksRef.current.length > 0) {
 						const paddedBlob = await addAudioPadding(blob);
-						onVoiceEnd?.(paddedBlob);
+						if (paddedBlob) {
+							onVoiceEnd?.(paddedBlob);
+						}
 					}
 					chunksRef.current = [];
 				};

@@ -621,16 +621,7 @@ export default function Translation() {
 							</span>
 						</div>
 					)}
-					{status === "idle" && (
-						<div className="flex items-center justify-center gap-[3px] h-10">
-							{IDLE_BAR_KEYS.map((key) => (
-								<div
-									key={key}
-									className="w-[3px] h-1 rounded-full bg-white/[0.08]"
-								/>
-							))}
-						</div>
-					)}
+					{status === "idle" && <div className="h-10" />}
 				</div>
 
 				{/* Hint */}

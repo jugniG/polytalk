@@ -127,6 +127,7 @@ console.log("[stt] client init", {
 async function transcribeWithGoogle(
 	audioBuffer: Buffer,
 	languageCodes: string[],
+	detectedFormat: string,
 ) {
 	if (!env.GOOGLE_CLOUD_PROJECT_ID) {
 		throw new Error(
@@ -147,10 +148,32 @@ async function transcribeWithGoogle(
 		region: env.GOOGLE_STT_REGION,
 	});
 
+	// autoDecodingConfig only handles WAV/FLAC/AMR/AMR-WB; Chrome's
+	// MediaRecorder emits WebM/Opus which Google cannot auto-detect, so
+	// specify the decoding params explicitly for those containers.
+	const decodingConfig =
+		detectedFormat === "webm"
+			? {
+					explicitDecodingConfig: {
+						encoding: "WEBM_OPUS",
+						sampleRateHertz: 48000,
+						audioChannelCount: 1,
+					},
+				}
+			: detectedFormat === "ogg"
+				? {
+						explicitDecodingConfig: {
+							encoding: "OGG_OPUS",
+							sampleRateHertz: 48000,
+							audioChannelCount: 1,
+						},
+					}
+				: { autoDecodingConfig: {} };
+
 	const [response] = await sttClient.recognize({
 		recognizer: recognizerPath,
 		config: {
-			autoDecodingConfig: {},
+			...decodingConfig,
 			languageCodes,
 			model: sttModel,
 		},
@@ -267,6 +290,7 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 									const userTranscript = await transcribeWithGoogle(
 										audioBuffer,
 										languageCodes,
+										detectedFormat,
 									);
 
 									if (!userTranscript) {
