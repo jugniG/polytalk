@@ -5,10 +5,7 @@ import speech from "@google-cloud/speech";
 import { createFileRoute } from "@tanstack/react-router";
 import { detectAudioFormat } from "#/lib/audio";
 import { env } from "#/lib/env";
-import {
-	detectLanguageFromTranscript,
-	translateText,
-} from "#/lib/translation/client";
+import { translateText } from "#/lib/translation/client";
 
 const defaultLocales: Record<string, string> = {
 	en: "en-US",
@@ -323,13 +320,34 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 
 									enqueue("transcript.delta", { text: userTranscript });
 
-									const detectedLanguage =
-										await detectLanguageFromTranscript(userTranscript);
+									// Google returns the spoken language with the
+									// translation — no separate detection call. If the
+									// detected language equals the secondary (i.e. the
+									// first call was same->same), the speech was
+									// actually in the secondary direction, so re-run
+									// the translation toward the primary.
+									let {
+										text: translatedText,
+										detectedLanguage,
+										durationMs: translateMs,
+									} = await translateText(userTranscript, secondaryLanguage);
+
+									if (detectedLanguage === secondaryLanguage) {
+										const flipped = await translateText(
+											userTranscript,
+											primaryLang,
+										);
+										translatedText = flipped.text;
+										detectedLanguage = flipped.detectedLanguage;
+										translateMs += flipped.durationMs;
+									}
+
 									console.log(`[${ts()}] [audio stream] transcript resolved`, {
 										userTranscript,
 										detectedLanguage,
 										primaryLang,
 										secondaryLanguage,
+										translateMs,
 									});
 
 									enqueue("transcript.final", {
@@ -347,15 +365,10 @@ export const Route = createFileRoute("/api/translate/audio/stream")({
 											? primaryLang
 											: secondaryLanguage;
 
-									const translatedText = await translateText(
-										userTranscript,
-										sourceLang,
-										targetLang,
-									);
-
 									console.log(`[${ts()}] [audio stream] translation complete`, {
 										sourceLang,
 										targetLang,
+										translateMs,
 										userTranscript,
 										translatedText,
 									});

@@ -123,10 +123,9 @@ export const Route = createFileRoute("/api/translate/audio/")({
 						);
 					}
 
-					const translatedText = await translateText(
-						userTranscript,
-						sourceLanguage,
+					const { text: translatedText } = await translateText(
 						targetLanguage,
+						sourceLanguage,
 					);
 
 					return new Response(
