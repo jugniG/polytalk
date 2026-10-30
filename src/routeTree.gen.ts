@@ -13,12 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as MicCheckRouteImport } from './routes/mic-check'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
-import { Route as DemoDrizzleRouteImport } from './routes/demo/drizzle'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as TranslateIndexRouteImport } from './routes/translate/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as DemoSentryTestingRouteImport } from './routes/demo/sentry.testing'
 import { Route as ApiTranslateAudioIndexRouteImport } from './routes/api/translate/audio/index'
 import { Route as ApiTranslateAudioStreamRouteImport } from './routes/api/translate/audio/stream'
 import { Route as ApiTranslateAudioTtsRouteImport } from './routes/api/translate/audio/tts'
@@ -43,21 +39,6 @@ const SignInRoute = SignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoBetterAuthRoute = DemoBetterAuthRouteImport.update({
-  id: '/demo/better-auth',
-  path: '/demo/better-auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoDrizzleRoute = DemoDrizzleRouteImport.update({
-  id: '/demo/drizzle',
-  path: '/demo/drizzle',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TranslateIndexRoute = TranslateIndexRouteImport.update({
   id: '/translate/',
   path: '/translate/',
@@ -66,11 +47,6 @@ const TranslateIndexRoute = TranslateIndexRouteImport.update({
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoSentryTestingRoute = DemoSentryTestingRouteImport.update({
-  id: '/demo/sentry/testing',
-  path: '/demo/sentry/testing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTranslateAudioIndexRoute = ApiTranslateAudioIndexRouteImport.update({
@@ -94,12 +70,8 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/mic-check': typeof MicCheckRoute
   '/sign-in': typeof SignInRoute
-  '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/translate/': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/sentry/testing': typeof DemoSentryTestingRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
   '/api/translate/audio/tts': typeof ApiTranslateAudioTtsRoute
   '/api/translate/audio/': typeof ApiTranslateAudioIndexRoute
@@ -109,12 +81,8 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/mic-check': typeof MicCheckRoute
   '/sign-in': typeof SignInRoute
-  '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/translate': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/sentry/testing': typeof DemoSentryTestingRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
   '/api/translate/audio/tts': typeof ApiTranslateAudioTtsRoute
   '/api/translate/audio': typeof ApiTranslateAudioIndexRoute
@@ -125,12 +93,8 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/mic-check': typeof MicCheckRoute
   '/sign-in': typeof SignInRoute
-  '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/translate/': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/sentry/testing': typeof DemoSentryTestingRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
   '/api/translate/audio/tts': typeof ApiTranslateAudioTtsRoute
   '/api/translate/audio/': typeof ApiTranslateAudioIndexRoute
@@ -142,12 +106,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/mic-check'
     | '/sign-in'
-    | '/demo/better-auth'
-    | '/demo/drizzle'
-    | '/demo/tanstack-query'
     | '/translate/'
     | '/api/auth/$'
-    | '/demo/sentry/testing'
     | '/api/translate/audio/stream'
     | '/api/translate/audio/tts'
     | '/api/translate/audio/'
@@ -157,12 +117,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/mic-check'
     | '/sign-in'
-    | '/demo/better-auth'
-    | '/demo/drizzle'
-    | '/demo/tanstack-query'
     | '/translate'
     | '/api/auth/$'
-    | '/demo/sentry/testing'
     | '/api/translate/audio/stream'
     | '/api/translate/audio/tts'
     | '/api/translate/audio'
@@ -172,12 +128,8 @@ export interface FileRouteTypes {
     | '/about'
     | '/mic-check'
     | '/sign-in'
-    | '/demo/better-auth'
-    | '/demo/drizzle'
-    | '/demo/tanstack-query'
     | '/translate/'
     | '/api/auth/$'
-    | '/demo/sentry/testing'
     | '/api/translate/audio/stream'
     | '/api/translate/audio/tts'
     | '/api/translate/audio/'
@@ -188,12 +140,8 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   MicCheckRoute: typeof MicCheckRoute
   SignInRoute: typeof SignInRoute
-  DemoBetterAuthRoute: typeof DemoBetterAuthRoute
-  DemoDrizzleRoute: typeof DemoDrizzleRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   TranslateIndexRoute: typeof TranslateIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  DemoSentryTestingRoute: typeof DemoSentryTestingRoute
   ApiTranslateAudioStreamRoute: typeof ApiTranslateAudioStreamRoute
   ApiTranslateAudioTtsRoute: typeof ApiTranslateAudioTtsRoute
   ApiTranslateAudioIndexRoute: typeof ApiTranslateAudioIndexRoute
@@ -229,27 +177,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/better-auth': {
-      id: '/demo/better-auth'
-      path: '/demo/better-auth'
-      fullPath: '/demo/better-auth'
-      preLoaderRoute: typeof DemoBetterAuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/drizzle': {
-      id: '/demo/drizzle'
-      path: '/demo/drizzle'
-      fullPath: '/demo/drizzle'
-      preLoaderRoute: typeof DemoDrizzleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/translate/': {
       id: '/translate/'
       path: '/translate'
@@ -262,13 +189,6 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/sentry/testing': {
-      id: '/demo/sentry/testing'
-      path: '/demo/sentry/testing'
-      fullPath: '/demo/sentry/testing'
-      preLoaderRoute: typeof DemoSentryTestingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/translate/audio/': {
@@ -300,12 +220,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   MicCheckRoute: MicCheckRoute,
   SignInRoute: SignInRoute,
-  DemoBetterAuthRoute: DemoBetterAuthRoute,
-  DemoDrizzleRoute: DemoDrizzleRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   TranslateIndexRoute: TranslateIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  DemoSentryTestingRoute: DemoSentryTestingRoute,
   ApiTranslateAudioStreamRoute: ApiTranslateAudioStreamRoute,
   ApiTranslateAudioTtsRoute: ApiTranslateAudioTtsRoute,
   ApiTranslateAudioIndexRoute: ApiTranslateAudioIndexRoute,
