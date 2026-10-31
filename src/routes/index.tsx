@@ -9,7 +9,7 @@ import {
 	Volume2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getLangFlagUrl } from "./backup/-actions";
+import { getLangFlagUrl } from "./translate/-actions";
 
 /* ─────────────────────────────────────────────────── */
 /*  Static page data                                   */

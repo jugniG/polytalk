@@ -11,9 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as DemoRouteImport } from './routes/demo'
 import { Route as MicCheckRouteImport } from './routes/mic-check'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as BackupIndexRouteImport } from './routes/backup/index'
 import { Route as TranslateIndexRouteImport } from './routes/translate/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiTranslateAudioIndexRouteImport } from './routes/api/translate/audio/index'
@@ -30,6 +30,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MicCheckRoute = MicCheckRouteImport.update({
   id: '/mic-check',
   path: '/mic-check',
@@ -38,11 +43,6 @@ const MicCheckRoute = MicCheckRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BackupIndexRoute = BackupIndexRouteImport.update({
-  id: '/backup/',
-  path: '/backup/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TranslateIndexRoute = TranslateIndexRouteImport.update({
@@ -74,9 +74,9 @@ const ApiTranslateAudioTtsRoute = ApiTranslateAudioTtsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/demo': typeof DemoRoute
   '/mic-check': typeof MicCheckRoute
   '/sign-in': typeof SignInRoute
-  '/backup/': typeof BackupIndexRoute
   '/translate/': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
@@ -86,9 +86,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/demo': typeof DemoRoute
   '/mic-check': typeof MicCheckRoute
   '/sign-in': typeof SignInRoute
-  '/backup': typeof BackupIndexRoute
   '/translate': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
@@ -99,9 +99,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/demo': typeof DemoRoute
   '/mic-check': typeof MicCheckRoute
   '/sign-in': typeof SignInRoute
-  '/backup/': typeof BackupIndexRoute
   '/translate/': typeof TranslateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/translate/audio/stream': typeof ApiTranslateAudioStreamRoute
@@ -113,9 +113,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/demo'
     | '/mic-check'
     | '/sign-in'
-    | '/backup/'
     | '/translate/'
     | '/api/auth/$'
     | '/api/translate/audio/stream'
@@ -125,9 +125,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/demo'
     | '/mic-check'
     | '/sign-in'
-    | '/backup'
     | '/translate'
     | '/api/auth/$'
     | '/api/translate/audio/stream'
@@ -137,9 +137,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/demo'
     | '/mic-check'
     | '/sign-in'
-    | '/backup/'
     | '/translate/'
     | '/api/auth/$'
     | '/api/translate/audio/stream'
@@ -150,9 +150,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  DemoRoute: typeof DemoRoute
   MicCheckRoute: typeof MicCheckRoute
   SignInRoute: typeof SignInRoute
-  BackupIndexRoute: typeof BackupIndexRoute
   TranslateIndexRoute: typeof TranslateIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiTranslateAudioStreamRoute: typeof ApiTranslateAudioStreamRoute
@@ -176,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mic-check': {
       id: '/mic-check'
       path: '/mic-check'
@@ -188,13 +195,6 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/backup/': {
-      id: '/backup/'
-      path: '/backup'
-      fullPath: '/backup/'
-      preLoaderRoute: typeof BackupIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/translate/': {
@@ -238,9 +238,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  DemoRoute: DemoRoute,
   MicCheckRoute: MicCheckRoute,
   SignInRoute: SignInRoute,
-  BackupIndexRoute: BackupIndexRoute,
   TranslateIndexRoute: TranslateIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiTranslateAudioStreamRoute: ApiTranslateAudioStreamRoute,
