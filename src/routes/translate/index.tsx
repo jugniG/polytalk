@@ -137,18 +137,18 @@ function DemoStage() {
 
 		setStatus("processing");
 
-		// Phase 1 (STT-ish latency): bubble appears with raw text only;
-		// the translated field stays empty so it shows its loading pulse.
-		const newMsgId = crypto.randomUUID();
-		const sttDelay = rand(600, 1000);
-
+		// The real page never shows a bubble with a partial state: it keeps
+		// the "Translating" dots in the footer and pushes the bubble only
+		// once transcript + translation are both ready, then auto-plays.
+		// Mirror that exactly with a single randomized wait.
+		const delayMs = rand(1400, 2400);
 		pendingTimeoutRef.current = window.setTimeout(() => {
 			setMessages((current) => [
 				...current,
 				{
-					id: newMsgId,
+					id: crypto.randomUUID(),
 					sourceText: turn.raw,
-					translatedText: "",
+					translatedText: turn.translated,
 					lang: turn.spokenLang,
 					targetLang: turn.targetLang,
 					recordedAudioUrl: turn.originalAudio,
@@ -156,28 +156,13 @@ function DemoStage() {
 					timestamp: new Date(),
 				},
 			]);
+			turnIdxRef.current += 1;
+			if (turnIdxRef.current >= SCRIPT.length) setScriptDone(true);
+			setActiveSide((s) => (s === "A" ? "B" : "A"));
+			setStatus("idle");
 
-			// Phase 2 (translate latency): translation fills in, then the
-			// app "speaks" exactly like the real auto-play flow. NOTE: the
-			// id is captured in the closure — reading the ref inside the
-			// setState updater races against React deferring the updater.
-			const translateDelay = rand(700, 1200);
-			pendingTimeoutRef.current = window.setTimeout(() => {
-				setMessages((current) =>
-					current.map((msg) =>
-						msg.id === newMsgId
-							? { ...msg, translatedText: turn.translated }
-							: msg,
-					),
-				);
-				turnIdxRef.current += 1;
-				if (turnIdxRef.current >= SCRIPT.length) setScriptDone(true);
-				setActiveSide((s) => (s === "A" ? "B" : "A"));
-				setStatus("idle");
-
-				void new Audio(turn.translatedAudio).play().catch(() => {});
-			}, translateDelay);
-		}, sttDelay);
+			void new Audio(turn.translatedAudio).play().catch(() => {});
+		}, delayMs);
 	};
 
 	const handleRecordButtonLeave = () => {
