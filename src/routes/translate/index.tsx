@@ -202,6 +202,8 @@ export default function Translation() {
 							timestamp: new Date(),
 							lang: result.sourceLang,
 							targetLang: result.targetLang,
+							// keep the exact recorded audio for replay
+							recordedAudioUrl: URL.createObjectURL(audioFile),
 						},
 					]);
 					window.setTimeout(() => {
@@ -387,6 +389,21 @@ export default function Translation() {
 				variant: "destructive",
 			});
 		}
+	};
+
+	const playRecordedAudio = async (msg: Message) => {
+		// Replay the user's actual recorded voice; fall back to TTS only if
+		// the recording was never kept.
+		if (msg.recordedAudioUrl) {
+			try {
+				const audio = new Audio(msg.recordedAudioUrl);
+				await audio.play();
+				return;
+			} catch (error) {
+				console.error("Error replaying recorded audio:", error);
+			}
+		}
+		await playAudio(msg.sourceText || "", msg.lang);
 	};
 
 	const handleRecordButtonDown = async () => {
@@ -626,7 +643,7 @@ export default function Translation() {
 								key={msg.id}
 								msg={msg}
 								mode={showTranslated ? "translated" : "raw"}
-								onPlayOriginal={() => playAudio(msg.sourceText || "", msg.lang)}
+								onPlayOriginal={() => playRecordedAudio(msg)}
 								onPlayTranslated={() =>
 									playAudio(msg.translatedText, msg.targetLang || msg.lang)
 								}

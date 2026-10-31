@@ -12,6 +12,8 @@ export interface Message {
 	sourceText?: string;
 	/** the translated text */
 	translatedText: string;
+	/** object URL of the actual recorded speech — replayed by "Play original" */
+	recordedAudioUrl?: string;
 	timestamp: Date;
 }
 
