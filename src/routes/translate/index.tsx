@@ -354,6 +354,41 @@ export default function Translation() {
 		}
 	};
 
+	const playAudio = async (text: string, langCode: string) => {
+		if (!text?.trim() || !langCode?.trim()) return;
+		if (typeof window === "undefined") return;
+
+		window.speechSynthesis?.cancel();
+
+		try {
+			const locale = langToLocale(langCode);
+			const res = await fetch("/api/translate/audio/tts", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					text: text.trim(),
+					languageCode: locale,
+				}),
+			});
+
+			if (!res.ok) {
+				throw new Error(`Google TTS failed with status ${res.status}`);
+			}
+			const data = (await res.json()) as { audio?: string };
+			if (!data.audio) throw new Error("Google TTS returned no audio");
+
+			const audio = new Audio(`data:audio/mpeg;base64,${data.audio}`);
+			await audio.play();
+		} catch (error) {
+			console.error("Error playing audio:", error);
+			toast({
+				title: "Audio playback failed",
+				description: "Could not play this audio.",
+				variant: "destructive",
+			});
+		}
+	};
+
 	const handleRecordButtonDown = async () => {
 		if (!isListening) {
 			// Initialize listening first
@@ -591,6 +626,10 @@ export default function Translation() {
 								key={msg.id}
 								msg={msg}
 								mode={showTranslated ? "translated" : "raw"}
+								onPlayOriginal={() => playAudio(msg.sourceText || "", msg.lang)}
+								onPlayTranslated={() =>
+									playAudio(msg.translatedText, msg.targetLang || msg.lang)
+								}
 							/>
 						))}
 						<div ref={messagesEndRef} />

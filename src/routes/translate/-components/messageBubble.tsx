@@ -1,4 +1,5 @@
 import langs from "langs";
+import { Volume2 } from "lucide-react";
 import { getLangFlagUrl } from "../-actions";
 
 export interface Message {
@@ -23,9 +24,13 @@ function codeToLangName(code: string) {
 export function MessageBubble({
 	msg,
 	mode,
+	onPlayOriginal,
+	onPlayTranslated,
 }: {
 	msg: Message;
 	mode: "raw" | "translated";
+	onPlayOriginal?: () => void;
+	onPlayTranslated?: () => void;
 }) {
 	const showRaw = mode === "raw";
 	const text = (showRaw ? msg.sourceText : msg.translatedText) || msg.translatedText;
@@ -65,6 +70,33 @@ export function MessageBubble({
 					)}
 				</p>
 			</div>
+
+			{(onPlayOriginal || onPlayTranslated) && (
+				<div className="flex items-center gap-2 pl-7 mt-1">
+					{onPlayOriginal && msg.sourceText?.trim() && (
+						<button
+							onClick={onPlayOriginal}
+							className="flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.16em] text-white/40 hover:border-white/20 hover:text-white hover:bg-white/[0.03] transition"
+							title="Play original"
+							data-testid="button-play-original"
+						>
+							<Volume2 className="h-3.5 w-3.5" />
+							Play original
+						</button>
+					)}
+					{onPlayTranslated && msg.translatedText?.trim() && (
+						<button
+							onClick={onPlayTranslated}
+							className="flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.16em] text-white/40 hover:border-white/20 hover:text-white hover:bg-white/[0.03] transition"
+							title="Play translated"
+							data-testid="button-play-translated"
+						>
+							<Volume2 className="h-3.5 w-3.5" />
+							Play translated
+						</button>
+					)}
+				</div>
+			)}
 		</div>
 	);
 }
