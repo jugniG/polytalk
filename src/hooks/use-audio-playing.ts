@@ -40,6 +40,7 @@ export function useAudioPlaying() {
 			};
 			audio.addEventListener("ended", clearIfCurrent, { once: true });
 			audio.addEventListener("pause", clearIfCurrent, { once: true });
+			audio.addEventListener("error", clearIfCurrent, { once: true });
 
 			void audio.play().catch(() => {
 				clearIfCurrent();
