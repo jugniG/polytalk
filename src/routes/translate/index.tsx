@@ -6,11 +6,13 @@
  * The fully functional implementation lives at /backup.
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowLeftRight, Mic } from "lucide-react";
+import { ArrowLeft, ArrowLeftRight, Mic, MicVocal } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getLangFlag, getLangFlagUrl } from "../backup/-actions";
+import { authClient } from "#/lib/auth-client";
+import { getLangFlag } from "../backup/-actions";
 import { MessageBubble, type Message } from "../backup/-components/messageBubble";
 import { WaveformBars } from "../backup/-components/waveformbars";
+import { LangCard } from "../backup/-components/langCard";
 
 export const Route = createFileRoute("/translate/")({ component: DemoStage });
 
@@ -56,35 +58,12 @@ const rand = (min: number, max: number) =>
 	Math.round(min + Math.random() * (max - min));
 
 /* ─────────────────────────────────────────────────── */
-/*  Static language card (no selector — fixed pair)    */
-/* ─────────────────────────────────────────────────── */
-
-function StaticLangCard({ label, lang }: { label: "A" | "B"; lang: string }) {
-	const flag = getLangFlagUrl(lang);
-	return (
-		<div className="flex-1 flex flex-col gap-3 rounded-2xl p-4 border bg-white/[0.03] border-white/20 transition-all duration-300">
-			<div className="flex items-center justify-between">
-				<span className="text-[10px] font-semibold text-white/50 uppercase tracking-[0.15em]">
-					Person {label}
-				</span>
-			</div>
-			<div className="flex items-center gap-2">
-				<img
-					src={flag}
-					alt={`${lang} flag`}
-					className="h-6 w-6 rounded-full object-cover"
-				/>
-				<span className="text-white font-semibold text-base">{lang}</span>
-			</div>
-		</div>
-	);
-}
-
-/* ─────────────────────────────────────────────────── */
 /*  Stage                                              */
 /* ─────────────────────────────────────────────────── */
 
 function DemoStage() {
+	const { data: session } = authClient.useSession();
+
 	const [messages, setMessages] = useState<DemoMsg[]>([]);
 	const [showTranslated, setShowTranslated] = useState(true);
 	const [activeSide, setActiveSide] = useState<"A" | "B">("A");
@@ -238,14 +217,41 @@ function DemoStage() {
 					</button>
 				</Link>
 
-				<div className="flex items-center gap-2">
-					<button
-						onClick={restart}
-						className="rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
-						data-testid="button-restart"
+				<div className="flex items-center gap-2 flex-wrap">
+					<select
+						value="default"
+						onChange={() => {}}
+						className="h-7 max-w-[140px] rounded-full border border-white/10 bg-white/[0.04] px-3 text-[10px] uppercase tracking-[0.12em] text-white/60 outline-none cursor-pointer appearance-none [&>option]:bg-zinc-900 [&>option]:text-white"
+						title="Microphone"
+						data-testid="select-mic-global"
 					>
-						Restart
-					</button>
+						<option value="default">Default mic</option>
+					</select>
+					<Link
+						to="/mic-check"
+						className="flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
+					>
+						<MicVocal className="h-4 w-4" />
+						Mic Check
+					</Link>
+					{session?.user && (
+						<button
+							onClick={() => void authClient.signOut()}
+							className="rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
+							data-testid="button-signout"
+						>
+							Sign out
+						</button>
+					)}
+					{scriptDone && (
+						<button
+							onClick={restart}
+							className="rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/40 hover:border-white/20 hover:text-white transition"
+							data-testid="button-restart"
+						>
+							Restart
+						</button>
+					)}
 				</div>
 			</header>
 
@@ -253,17 +259,21 @@ function DemoStage() {
 			<div className="flex-shrink-0 px-4 pt-4 pb-3">
 				<div className="flex items-stretch justify-center gap-3">
 					<div>
-						<StaticLangCard label="A" lang={LANG_A} />
+						<LangCard label="A" lang={LANG_A} onLangChange={() => {}} />
 					</div>
 
 					<div className="flex flex-col items-center justify-center gap-2 flex-shrink-0">
-						<div className="w-9 h-9 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/30">
+						<button
+							className="w-9 h-9 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/10 transition-all duration-200"
+							title="Swap languages"
+							data-testid="button-swap-langs"
+						>
 							<ArrowLeftRight className="w-3.5 h-3.5" />
-						</div>
+						</button>
 					</div>
 
 					<div>
-						<StaticLangCard label="B" lang={LANG_B} />
+						<LangCard label="B" lang={LANG_B} onLangChange={() => {}} />
 					</div>
 				</div>
 
