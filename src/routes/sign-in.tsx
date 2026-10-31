@@ -25,7 +25,7 @@ function SignIn() {
   }
 
   if (session?.user) {
-    void navigate({ to: "/translate" });
+    void navigate({ to: "/backup" });
     return null;
   }
 
@@ -40,7 +40,7 @@ function SignIn() {
       if (result.error) {
         setError(result.error.message || (isSignUp ? "Sign up failed" : "Sign in failed"));
       } else {
-        void navigate({ to: "/translate" });
+        void navigate({ to: "/backup" });
       }
     } catch {
       setError("An unexpected error occurred");
@@ -66,7 +66,7 @@ function SignIn() {
           onClick={() =>
             void authClient.signIn.social({
               provider: "google",
-              callbackURL: "/translate",
+              callbackURL: "/backup",
             })
           }
           className="flex h-10 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] text-sm font-medium text-white transition hover:bg-white/[0.08]"

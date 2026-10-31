@@ -129,7 +129,7 @@ function MicCheck() {
 			<div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-8">
 				<div className="flex items-center justify-between">
 					<Link
-						to="/translate"
+						to="/backup"
 						className="inline-flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white"
 					>
 						<ArrowLeft className="h-4 w-4" />
