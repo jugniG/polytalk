@@ -23,14 +23,57 @@ function codeToLangName(code: string) {
 	return name === "Panjabi" ? "Punjabi" : name;
 }
 
+/* Equalizer bars shown while this button's audio is playing */
+function PlayingBars() {
+	return (
+		<span className="flex items-center gap-[2px] h-3" aria-hidden>
+			<span className="w-[3px] h-2 rounded-full bg-current animate-bounce [animation-delay:-200ms] [animation-duration:500ms]" />
+			<span className="w-[3px] h-3 rounded-full bg-current animate-bounce [animation-duration:500ms]" />
+			<span className="w-[3px] h-2 rounded-full bg-current animate-bounce [animation-delay:200ms] [animation-duration:500ms]" />
+		</span>
+	);
+}
+
+function PlayButton({
+	side,
+	playing,
+	onClick,
+	children,
+}: {
+	side: "original" | "translated";
+	playing: boolean;
+	onClick: () => void;
+	children: React.ReactNode;
+}) {
+	const active = playing;
+	return (
+		<button
+			onClick={onClick}
+			className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9px] uppercase tracking-[0.16em] transition ${
+				active
+					? "border-emerald-400/50 bg-emerald-400/10 text-emerald-300"
+					: "border-white/10 text-white/40 hover:border-white/20 hover:text-white hover:bg-white/[0.03]"
+			}`}
+			title={active ? "Playing…" : undefined}
+			data-testid={`button-play-${side}`}
+			data-playing={active ? "true" : "false"}
+		>
+			{active ? <PlayingBars /> : <Volume2 className="h-3.5 w-3.5" />}
+			{children}
+		</button>
+	);
+}
+
 export function MessageBubble({
 	msg,
 	mode,
+	playing,
 	onPlayOriginal,
 	onPlayTranslated,
 }: {
 	msg: Message;
 	mode: "raw" | "translated";
+	playing?: "original" | "translated" | null;
 	onPlayOriginal?: () => void;
 	onPlayTranslated?: () => void;
 }) {
@@ -76,26 +119,22 @@ export function MessageBubble({
 			{(onPlayOriginal || onPlayTranslated) && (
 				<div className="flex items-center gap-2 pl-7 mt-1">
 					{onPlayOriginal && msg.sourceText?.trim() && (
-						<button
+						<PlayButton
+							side="original"
+							playing={playing === "original"}
 							onClick={onPlayOriginal}
-							className="flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.16em] text-white/40 hover:border-white/20 hover:text-white hover:bg-white/[0.03] transition"
-							title="Play original"
-							data-testid="button-play-original"
 						>
-							<Volume2 className="h-3.5 w-3.5" />
 							Play original
-						</button>
+						</PlayButton>
 					)}
 					{onPlayTranslated && msg.translatedText?.trim() && (
-						<button
+						<PlayButton
+							side="translated"
+							playing={playing === "translated"}
 							onClick={onPlayTranslated}
-							className="flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.16em] text-white/40 hover:border-white/20 hover:text-white hover:bg-white/[0.03] transition"
-							title="Play translated"
-							data-testid="button-play-translated"
 						>
-							<Volume2 className="h-3.5 w-3.5" />
 							Play translated
-						</button>
+						</PlayButton>
 					)}
 				</div>
 			)}

@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowLeftRight, Mic, MicVocal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDevices } from "@/hooks/use-devices";
 import { authClient } from "#/lib/auth-client";
+import { useAudioPlaying } from "#/hooks/use-audio-playing";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslationStream } from "@/hooks/use-translation-stream";
 import { useVoiceDetection } from "@/hooks/use-voice-detection";
@@ -34,6 +35,7 @@ export default function Translation() {
 	const { toast } = useToast();
 	const navigate = useNavigate();
 	const { data: session, isPending: isAuthPending } = authClient.useSession();
+	const { playing, trackAudio, stop } = useAudioPlaying();
 	const { mics, hasPermission, requestPermission } = useDevices();
 
 	useEffect(() => {
@@ -193,10 +195,11 @@ export default function Translation() {
 						return;
 					}
 
+					const newMsgId = crypto.randomUUID();
 					setMessages((current) => [
 						...current,
 						{
-							id: crypto.randomUUID(),
+							id: newMsgId,
 							translatedText: result.translatedText,
 							sourceText: result.userTranscript,
 							timestamp: new Date(),
@@ -215,6 +218,7 @@ export default function Translation() {
 							result.translatedText,
 							result.targetLang,
 							"default",
+							newMsgId,
 						);
 					}
 
@@ -254,6 +258,7 @@ export default function Translation() {
 		text: string,
 		secondaryLanguage: string,
 		targetSpeaker: string,
+		msgId?: string,
 	) => {
 		if (!text.trim()) {
 			console.debug("[TTS] skipped empty text");
@@ -316,7 +321,12 @@ export default function Translation() {
 						console.warn("[TTS] speaker sink change failed", sinkError);
 					}
 				}
-				await audio.play();
+				if (msgId) {
+					// mark this translation as the one playing until it ends
+					trackAudio(msgId, "translated", audio);
+				} else {
+					await audio.play();
+				}
 				return;
 			}
 
@@ -356,7 +366,12 @@ export default function Translation() {
 		}
 	};
 
-	const playAudio = async (text: string, langCode: string) => {
+	const playAudio = async (
+		text: string,
+		langCode: string,
+		msgId?: string,
+		side: "original" | "translated" = "translated",
+	) => {
 		if (!text?.trim() || !langCode?.trim()) return;
 		if (typeof window === "undefined") return;
 
@@ -380,9 +395,14 @@ export default function Translation() {
 			if (!data.audio) throw new Error("Google TTS returned no audio");
 
 			const audio = new Audio(`data:audio/mpeg;base64,${data.audio}`);
-			await audio.play();
+			if (msgId) {
+				trackAudio(msgId, side, audio);
+			} else {
+				await audio.play();
+			}
 		} catch (error) {
 			console.error("Error playing audio:", error);
+			if (msgId) stop(msgId, side);
 			toast({
 				title: "Audio playback failed",
 				description: "Could not play this audio.",
@@ -395,15 +415,10 @@ export default function Translation() {
 		// Replay the user's actual recorded voice; fall back to TTS only if
 		// the recording was never kept.
 		if (msg.recordedAudioUrl) {
-			try {
-				const audio = new Audio(msg.recordedAudioUrl);
-				await audio.play();
-				return;
-			} catch (error) {
-				console.error("Error replaying recorded audio:", error);
-			}
+			trackAudio(msg.id, "original", new Audio(msg.recordedAudioUrl));
+			return;
 		}
-		await playAudio(msg.sourceText || "", msg.lang);
+		await playAudio(msg.sourceText || "", msg.lang, msg.id, "original");
 	};
 
 	const handleRecordButtonDown = async () => {
@@ -645,8 +660,9 @@ export default function Translation() {
 								mode={showTranslated ? "translated" : "raw"}
 								onPlayOriginal={() => playRecordedAudio(msg)}
 								onPlayTranslated={() =>
-									playAudio(msg.translatedText, msg.targetLang || msg.lang)
+									playAudio(msg.translatedText, msg.targetLang || msg.lang, msg.id)
 								}
+								playing={playing?.msgId === msg.id ? playing.side : null}
 							/>
 						))}
 						<div ref={messagesEndRef} />

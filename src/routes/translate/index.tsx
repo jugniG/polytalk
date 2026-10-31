@@ -9,6 +9,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowLeftRight, Mic, MicVocal } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { authClient } from "#/lib/auth-client";
+import { useAudioPlaying } from "#/hooks/use-audio-playing";
 import { getLangFlag } from "../backup/-actions";
 import { MessageBubble, type Message } from "../backup/-components/messageBubble";
 import { WaveformBars } from "../backup/-components/waveformbars";
@@ -63,6 +64,7 @@ const rand = (min: number, max: number) =>
 
 function DemoStage() {
 	const { data: session } = authClient.useSession();
+	const { playing, trackAudio } = useAudioPlaying();
 
 	const [messages, setMessages] = useState<DemoMsg[]>([]);
 	const [showTranslated, setShowTranslated] = useState(true);
@@ -142,11 +144,12 @@ function DemoStage() {
 		// once transcript + translation are both ready, then auto-plays.
 		// Mirror that exactly with a single randomized wait.
 		const delayMs = rand(1400, 2400);
+		const newMsgId = crypto.randomUUID();
 		pendingTimeoutRef.current = window.setTimeout(() => {
 			setMessages((current) => [
 				...current,
 				{
-					id: crypto.randomUUID(),
+					id: newMsgId,
 					sourceText: turn.raw,
 					translatedText: turn.translated,
 					lang: turn.spokenLang,
@@ -161,7 +164,9 @@ function DemoStage() {
 			setActiveSide((s) => (s === "A" ? "B" : "A"));
 			setStatus("idle");
 
-			void new Audio(turn.translatedAudio).play().catch(() => {});
+			// auto-play what the app would speak — the bubble's translated
+			// button animates while it plays
+			trackAudio(newMsgId, "translated", new Audio(turn.translatedAudio));
 		}, delayMs);
 	};
 
@@ -330,15 +335,20 @@ function DemoStage() {
 								mode={showTranslated ? "translated" : "raw"}
 								onPlayOriginal={() => {
 									if (msg.recordedAudioUrl)
-										void new Audio(msg.recordedAudioUrl)
-											.play()
-											.catch(() => {});
+										trackAudio(
+											msg.id,
+											"original",
+											new Audio(msg.recordedAudioUrl),
+										);
 								}}
 								onPlayTranslated={() => {
-									void new Audio(msg.translatedAudioUrl)
-										.play()
-										.catch(() => {});
+									trackAudio(
+										msg.id,
+										"translated",
+										new Audio(msg.translatedAudioUrl),
+									);
 								}}
+								playing={playing?.msgId === msg.id ? playing.side : null}
 							/>
 						))}
 						<div ref={messagesEndRef} />
