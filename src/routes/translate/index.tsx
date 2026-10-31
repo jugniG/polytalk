@@ -76,8 +76,6 @@ function DemoStage() {
 	const turnIdxRef = useRef(0);
 	const waveTimerRef = useRef<number | null>(null);
 	const pendingTimeoutRef = useRef<number | null>(null);
-	const pendingMsgIdRef = useRef<string | null>(null);
-	const pendingAudioRef = useRef<string | null>(null);
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
 	const clearTimers = useCallback(() => {
@@ -141,15 +139,14 @@ function DemoStage() {
 
 		// Phase 1 (STT-ish latency): bubble appears with raw text only;
 		// the translated field stays empty so it shows its loading pulse.
-		pendingMsgIdRef.current = crypto.randomUUID();
-		pendingAudioRef.current = turn.translatedAudio;
+		const newMsgId = crypto.randomUUID();
 		const sttDelay = rand(600, 1000);
 
 		pendingTimeoutRef.current = window.setTimeout(() => {
 			setMessages((current) => [
 				...current,
 				{
-					id: pendingMsgIdRef.current!,
+					id: newMsgId,
 					sourceText: turn.raw,
 					translatedText: "",
 					lang: turn.spokenLang,
@@ -161,26 +158,24 @@ function DemoStage() {
 			]);
 
 			// Phase 2 (translate latency): translation fills in, then the
-			// app "speaks" exactly like the real auto-play flow.
+			// app "speaks" exactly like the real auto-play flow. NOTE: the
+			// id is captured in the closure — reading the ref inside the
+			// setState updater races against React deferring the updater.
 			const translateDelay = rand(700, 1200);
 			pendingTimeoutRef.current = window.setTimeout(() => {
 				setMessages((current) =>
 					current.map((msg) =>
-						msg.id === pendingMsgIdRef.current
+						msg.id === newMsgId
 							? { ...msg, translatedText: turn.translated }
 							: msg,
 					),
 				);
-				pendingMsgIdRef.current = null;
 				turnIdxRef.current += 1;
 				if (turnIdxRef.current >= SCRIPT.length) setScriptDone(true);
 				setActiveSide((s) => (s === "A" ? "B" : "A"));
 				setStatus("idle");
 
-				if (pendingAudioRef.current) {
-					void new Audio(pendingAudioRef.current).play().catch(() => {});
-					pendingAudioRef.current = null;
-				}
+				void new Audio(turn.translatedAudio).play().catch(() => {});
 			}, translateDelay);
 		}, sttDelay);
 	};
@@ -193,8 +188,6 @@ function DemoStage() {
 	const restart = () => {
 		clearTimers();
 		turnIdxRef.current = 0;
-		pendingMsgIdRef.current = null;
-		pendingAudioRef.current = null;
 		setScriptDone(false);
 		setMessages([]);
 		setWaveformData([]);
